@@ -21,35 +21,35 @@ public interface AdminService {
 	
 	String addEmployee(Employee employee);
 	
-	String getEmployees();
+	String getEmployees(int enterpriseId);
 	
 	String deleteEmployee(String employeeId);
 	
 	String addProduct(Product product);
 	
-	String getProducts();
+	String getProducts(int enterpriseId);
 	
 	String deleteProduct(int productId);
 	
-	String getCompositions();
+	String getCompositions(int enterpriseId);
 	
 	String addComposition(int productId, int compositionId);
 	
 	String deleteComposition(int productId, int compositionId);
 	
-	String getEnterpriseDelegations();
+	String getEnterpriseDelegations(int enterpriseId);
 	
 	String delegateEnterprise(String employeeId, int enterpriseId);
 	
 	String cancelDelegationOfEnterprise(String employeeId, int enterpriseId);
 	
-	String getProductDelegations();
+	String getProductDelegations(int enterpriseId);
 	
 	String delegateProduct(String employeeId, int productId);
 	
 	String cancelDelegationOfProduct(String employeeId, int productId);
 	
-	String getCorporations();
+	String getCorporations(int enterpriseId);
 	
 	String corporate(Corporation corporation);
 	

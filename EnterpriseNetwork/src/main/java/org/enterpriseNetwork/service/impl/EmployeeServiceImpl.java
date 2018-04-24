@@ -63,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		session.setAttribute("emp", worker_no);
 		Cookie cookie = null;
 		try {
-			cookie = new Cookie("emp", URLEncoder.encode(emp.getName(),"UTF-8")+":"+password);
+			cookie = new Cookie("emp", URLEncoder.encode(emp.getName(),"UTF-8")+":"+emp.getEnterprise_id());
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("URL编码不支持，请检查login()");
 		}
@@ -73,22 +73,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public String getResponsibleEnterprises(String employeeId) {
-		return employeeDao.getResponsibleEnterprise(employeeId);
+		Result result = new Result();
+		result.setObject(employeeDao.getResponsibleEnterprises(employeeId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
 	public String getResponsibleProducts(String employeeId) {
-		return employeeDao.getResponsibleProducts(employeeId);
+		Result result = new Result();
+		result.setObject(employeeDao.getResponsibleProducts(employeeId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
 	public String getColleagues(String employeeId) {
-		return employeeDao.getColleagues(employeeId);
+		Result result = new Result();
+		result.setObject(employeeDao.getColleagues(employeeId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
 	public String createNewColleague(String employeeId, String colleagueId) {
-		return employeeDao.createNewColleague(employeeId, colleagueId);
+		Result result = new Result();
+		result.setObject(employeeDao.createNewColleague(employeeId, colleagueId));
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String getPretenialColleagues(String employeeId) {
+		Result result = new Result();
+		result.setObject(employeeDao.getPretenialColleagues(employeeId));
+		return JSONObject.toJSONString(result);
 	}
 
 }

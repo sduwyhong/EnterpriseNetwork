@@ -22,5 +22,7 @@ public interface EmployeeService {
 	
 	String getColleagues(String employeeId);
 	
+	String getPretenialColleagues(String employeeId);
+	
 	String createNewColleague(String employeeId, String colleageId);
 }

@@ -142,4 +142,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM admin
 		WHERE admin_no = #{admin_no}
 	</select>
+	
+	<select id="getEmployees" resultType="Employee">
+		SELECT *
+		FROM employee
+		WHERE enterprise_id = #{enterpriseId}
+	</select>
+	
+	<select id="getProducts" resultType="Product">
+		SELECT *
+		FROM product
+		WHERE product.enterprise_id = #{enterpriseId}
+	</select>
+	
+	<select id="getCompositions" resultType="Composition">
+		SELECT cr.id,p1.name product_name,p2.name composition_name
+		FROM product p1,compose_relation cr,product p2
+		WHERE p1.id = cr.product_id
+		AND p2.id = cr.composition_id
+		AND p1.enterprise_id = #{enterpriseId}
+	</select>
+	
+	<select id="getEnterpriseDelegations" resultType="EnterpriseDelegation">
+		SELECT ee.id,em.name employee_name,en.name enterprise_name
+		FROM employee em,employee_enterprise ee,enterprise en
+		WHERE em.id = ee.employee_id
+		AND en.id = ee.enterprise_id
+		AND en.id = #{enterpriseId}
+	</select>
+	
+	<select id="getProductDelegations" resultType="ProductDelegation">
+		SELECT ep.id,em.name employee_name,p.name product_name
+		FROM employee em,employee_product ep,product p
+		WHERE em.id = ep.employee_id
+		AND p.id = ep.product_id
+		AND em.enterprise_id = #{enterpriseId}
+	</select>
+	
+	<select id="getCorporations" resultType="Corporation">
+		SELECT ee.id,en1.id enterprise_id_1,en2.id enterprise_id_2,ee.supply,ee.stock,ee.distribution
+		FROM enterprise e1,enterprise_relation er,enterprise e2
+		WHERE e1.id = er.enterprise_id_1
+		AND e2.id = er.enterprise_id_2
+		AND e1.id = #{enterpriseId}
+	</select>
 </mapper>

@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
 		session.setAttribute("admin", admin_no);
 		Cookie cookie = null;
 		try {
-			cookie = new Cookie("admin", URLEncoder.encode(admin.getName(),"UTF-8")+":"+password);
+			cookie = new Cookie("admin", URLEncoder.encode(admin.getName(),"UTF-8")+":"+admin.getEnterprise_id());
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("URL编码不支持，请检查login()");
 		}
@@ -160,39 +160,45 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String getEmployees() {
-		
-		return null;
+	public String getEmployees(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getEmployees(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
-	public String getProducts() {
-		
-		return null;
+	public String getProducts(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getProducts(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
-	public String getCompositions() {
-		
-		return null;
+	public String getCompositions(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getCompositions(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
-	public String getEnterpriseDelegations() {
-		
-		return null;
+	public String getEnterpriseDelegations(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getEnterpriseDelegations(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
-	public String getProductDelegations() {
-		
-		return null;
+	public String getProductDelegations(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getProductDelegations(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 	@Override
-	public String getCorporations() {
-		
-		return null;
+	public String getCorporations(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getCorporations(enterpriseId));
+		return JSONObject.toJSONString(result);
 	}
 
 }
