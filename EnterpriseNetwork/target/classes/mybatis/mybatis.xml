@@ -8,6 +8,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     </settings>
 	<typeAliases>
 		<package name="org.enterpriseNetwork.model" />
-		<!--  <package name="org.enterpriseNetwork.VO" /> -->
+		<package name="org.enterpriseNetwork.VO" />
 	</typeAliases>
 </configuration>

@@ -16,6 +16,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{enterprise_id})
 	</insert>
 	
+	<insert id="createNewColleague">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO colleague_relation
+		VALUES
+			(#{id},
+			#{employeeId},
+			#{colleagueId})
+	</insert>
+	
 	<delete id="delete">
 		DELETE FROM employee
 		WHERE id = #{id}
@@ -43,5 +54,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getAll" resultType="Employee">
 		SELECT *
 		FROM employee
+	</select>
+	
+	<select id="getByNo" resultType="Employee">
+		SELECT *
+		FROM employee
+		WHERE worker_no = #{worker_no}
+	</select>
+	
+	<select id="getResponsibleEnterprise" resultType="Enterprise">
+		SELECT en.*
+		FROM employee em,employee_enterprise ee,enterprise en
+		WHERE em.id = ee.employee_id 
+		AND en.id = ee.enterprise_id
+		AND em.id = #{employeeId}
+	</select>
+	
+	<select id="getResponsibleProducts" resultType="Product">
+		SELECT p.*
+		FROM employee e,employee_product ep,product p
+		WHERE e.id = ep.employee_id
+		AND p.id = ep.product_id
+		AND e.id = #{employeeId}
+	</select>
+	
+	<select id="getColleagues" resultType="Employee">
+		SELECT em2.*
+		FROM employee em1,colleague_relation cr,employee em2
+		WHERE (em1.id = cr.emp_id_1 AND em2.id = cr.emp_id_2)
+		OR (em2.id = cr.emp_id_1 AND em1.id = cr.emp_id_2)
+		AND em1.id = #{employeeId}
 	</select>
 </mapper>

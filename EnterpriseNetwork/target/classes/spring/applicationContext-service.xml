@@ -12,5 +12,7 @@
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
 	
+	<bean id="enterpriseService" class="org.enterpriseNetwork.service.impl.EnterpriseServiceImpl"></bean>
 	
+	<bean id="employeeServiceImpl" class="org.enterpriseNetwork.service.impl.EmployeeServiceImpl"></bean>
 </beans>
