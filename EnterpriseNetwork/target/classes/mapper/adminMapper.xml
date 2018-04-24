@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.enterpriseNetwork.dao.admin.AdminDao">
+	<insert id="insert">
+		INSERT INTO admin
+		VALUES
+			(#{id},
+			#{admin_no},
+			#{password},
+			#{name},
+			#{gender},
+			#{age},
+			#{email},
+			#{enterprise_id})
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM admin
+		WHERE id = #{id}
+	</delete>
+	
+	<update id="update">
+		UPDATE admin
+		SET 
+			admin_no = #{admin_no},
+			password = #{password},
+			name = #{name},
+			gender = #{gender},
+			age = #{age},
+			email = #{email},
+			enterprise_id = #{enterprise_id}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="get" resultType="Admin">
+		SELECT *
+		FROM admin
+		WHERE id = #{id}
+	</select>
+	
+	<select id="getAll" resultType="Admin">
+		SELECT *
+		FROM admin
+	</select>
+</mapper>
