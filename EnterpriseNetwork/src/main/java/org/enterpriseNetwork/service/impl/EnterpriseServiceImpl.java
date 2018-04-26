@@ -34,4 +34,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 		return Result.OK;
 	}
 
+	@Override
+	public String getName(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(enterpriseDao.getName(enterpriseId));
+		return JSONObject.toJSONString(result);
+	}
+
 }

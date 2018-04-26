@@ -10,6 +10,7 @@ import org.enterpriseNetwork.VO.ProductDelegation;
 import org.enterpriseNetwork.dao.StringBaseDao;
 import org.enterpriseNetwork.model.Admin;
 import org.enterpriseNetwork.model.Employee;
+import org.enterpriseNetwork.model.Enterprise;
 import org.enterpriseNetwork.model.Product;
 
 /**
@@ -53,6 +54,8 @@ public interface AdminDao extends StringBaseDao<Admin>{
 	List<ProductDelegation> getProductDelegations(int enterpriseId);
 
 	List<Corporation> getCorporations(int enterpriseId);
+
+	List<Enterprise> getEnterprises();
 
 
 }

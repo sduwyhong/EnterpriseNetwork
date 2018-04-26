@@ -14,10 +14,14 @@ import org.enterpriseNetwork.model.Product;
  */
 public interface AdminService {
 
+	String getEnterprises();
+	
 	String register(Admin admin);
 	
 	String login(String admin_no, String password, 
 			HttpServletRequest request, HttpServletResponse response);
+	
+	void logout(HttpServletRequest request, HttpServletResponse response);
 	
 	String addEmployee(Employee employee);
 	

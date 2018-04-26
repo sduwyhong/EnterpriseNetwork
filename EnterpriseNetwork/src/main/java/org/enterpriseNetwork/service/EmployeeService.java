@@ -16,6 +16,12 @@ public interface EmployeeService {
 	String login(String worker_no, String password, 
 			HttpServletRequest request, HttpServletResponse response);
 	
+	void logout(HttpServletRequest request, HttpServletResponse response);
+	
+	String getInfo(String employeeId);
+	
+	String update(Employee employee);
+	
 	String getResponsibleEnterprises(String employeeId);
 	
 	String getResponsibleProducts(String employeeId);
@@ -24,5 +30,7 @@ public interface EmployeeService {
 	
 	String getPretenialColleagues(String employeeId);
 	
-	String createNewColleague(String employeeId, String colleageId);
+	String createNewColleague(String employeeId, String colleagueId);
+
+	String getEnterprises();
 }

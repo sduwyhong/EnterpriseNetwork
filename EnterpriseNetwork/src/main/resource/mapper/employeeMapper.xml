@@ -17,13 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<insert id="createNewColleague">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO colleague_relation
+			(emp_id_1,
+			emp_id_2)
 		VALUES
-			(#{id},
-			#{employeeId},
+			(#{employeeId},
 			#{colleagueId})
 	</insert>
 	
@@ -40,8 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			name = #{name},
 			gender = #{gender},
 			age = #{age},
-			email = #{email},
-			enterprise_id = #{enterprise_id}
+			email = #{email}
 		WHERE id = #{id}
 	</update>
 	
@@ -81,9 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getColleagues" resultType="Employee">
 		SELECT em2.*
 		FROM employee em1,colleague_relation cr,employee em2
-		WHERE (em1.id = cr.emp_id_1 AND em2.id = cr.emp_id_2)
-		OR (em2.id = cr.emp_id_1 AND em1.id = cr.emp_id_2)
-		AND em1.id = #{employeeId}
+		WHERE em1.id = #{employeeId}
+		AND ((em1.id = cr.emp_id_1 AND em2.id = cr.emp_id_2)
+		OR (em2.id = cr.emp_id_1 AND em1.id = cr.emp_id_2))
 	</select>
 	
 	<select id="getPretenialColleagues" resultType="Employee">
@@ -92,5 +89,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE em1.id = #{employeeId}
 		AND em1.enterprise_id = em2.enterprise_id
 		AND em1.id != em2.id
+	</select>
+	
+	<select id="getInfo" resultType="EmployeeInfo">
+		SELECT en.name enterprise_name,em.*
+		FROM employee em,enterprise en
+		WHERE em.enterprise_id = en.id
+		AND em.id = #{employeeId}
 	</select>
 </mapper>

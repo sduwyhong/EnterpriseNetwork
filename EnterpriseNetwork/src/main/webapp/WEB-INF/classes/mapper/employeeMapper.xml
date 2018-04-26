@@ -16,6 +16,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{enterprise_id})
 	</insert>
 	
+	<insert id="createNewColleague">
+		INSERT INTO colleague_relation
+			(emp_id_1,
+			emp_id_2)
+		VALUES
+			(#{employeeId},
+			#{colleagueId})
+	</insert>
+	
 	<delete id="delete">
 		DELETE FROM employee
 		WHERE id = #{id}
@@ -29,8 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			name = #{name},
 			gender = #{gender},
 			age = #{age},
-			email = #{email},
-			enterprise_id = #{enterprise_id}
+			email = #{email}
 		WHERE id = #{id}
 	</update>
 	
@@ -43,5 +51,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getAll" resultType="Employee">
 		SELECT *
 		FROM employee
+	</select>
+	
+	<select id="getByNo" resultType="Employee">
+		SELECT *
+		FROM employee
+		WHERE worker_no = #{worker_no}
+	</select>
+	
+	<select id="getResponsibleEnterprises" resultType="Enterprise">
+		SELECT en.*
+		FROM employee em,employee_enterprise ee,enterprise en
+		WHERE em.id = ee.employee_id 
+		AND en.id = ee.enterprise_id
+		AND em.id = #{employeeId}
+	</select>
+	
+	<select id="getResponsibleProducts" resultType="Product">
+		SELECT p.*
+		FROM employee e,employee_product ep,product p
+		WHERE e.id = ep.employee_id
+		AND p.id = ep.product_id
+		AND e.id = #{employeeId}
+	</select>
+	
+	<select id="getColleagues" resultType="Employee">
+		SELECT em2.*
+		FROM employee em1,colleague_relation cr,employee em2
+		WHERE em1.id = #{employeeId}
+		AND ((em1.id = cr.emp_id_1 AND em2.id = cr.emp_id_2)
+		OR (em2.id = cr.emp_id_1 AND em1.id = cr.emp_id_2))
+	</select>
+	
+	<select id="getPretenialColleagues" resultType="Employee">
+		SELECT em2.*
+		FROM employee em1,employee em2
+		WHERE em1.id = #{employeeId}
+		AND em1.enterprise_id = em2.enterprise_id
+		AND em1.id != em2.id
+	</select>
+	
+	<select id="getInfo" resultType="EmployeeInfo">
+		SELECT en.name enterprise_name,em.*
+		FROM employee em,enterprise en
+		WHERE em.enterprise_id = en.id
+		AND em.id = #{employeeId}
 	</select>
 </mapper>

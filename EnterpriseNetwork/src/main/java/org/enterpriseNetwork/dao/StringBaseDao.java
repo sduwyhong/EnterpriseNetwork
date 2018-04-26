@@ -14,7 +14,7 @@ public interface StringBaseDao<T> {
 	
 	int update(T t);
 	
-	int get(String id);
+	T get(String id);
 	
 	List<T> getAll();
 }

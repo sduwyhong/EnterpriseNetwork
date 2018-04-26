@@ -186,4 +186,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND e2.id = er.enterprise_id_2
 		AND e1.id = #{enterpriseId}
 	</select>
+	
+	<select id="getEnterprises" resultType="Enterprise">
+		SELECT *
+		FROM enterprise
+	</select>
 </mapper>

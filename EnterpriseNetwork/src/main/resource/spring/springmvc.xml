@@ -8,5 +8,20 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
+	<mvc:annotation-driven></mvc:annotation-driven>
 	
+	<mvc:default-servlet-handler/>
+	
+	<context:component-scan base-package="org.enterpriseNetwork.controller"></context:component-scan>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/employee/auth/**"/>
+			<bean class="org.enterpriseNetwork.interceptor.EmpAuthInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/auth/**"/>
+			<bean class="org.enterpriseNetwork.interceptor.AdminAuthInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>

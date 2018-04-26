@@ -39,4 +39,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT *
 		FROM enterprise
 	</select>
+	
+	<select id="getName" resultType="java.lang.String">
+		SELECT name
+		FROM enterprise
+		WHERE id = #{enterpriseId}
+	</select>
 </mapper>

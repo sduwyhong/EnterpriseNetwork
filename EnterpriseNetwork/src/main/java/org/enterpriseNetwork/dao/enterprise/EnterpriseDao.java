@@ -9,4 +9,6 @@ import org.enterpriseNetwork.model.Enterprise;
  */
 public interface EnterpriseDao extends IntBaseDao<Enterprise> {
 
+	String getName(int enterpriseId);
+
 }

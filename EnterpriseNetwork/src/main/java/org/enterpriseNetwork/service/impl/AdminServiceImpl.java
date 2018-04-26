@@ -3,6 +3,7 @@ package org.enterpriseNetwork.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,7 @@ public class AdminServiceImpl implements AdminService {
 		if(!errors.isEmpty()) {
 			return Result.BAD_PARAMS;
 		}
+		admin.setId(UUID.randomUUID().toString().replace("-", ""));
 		adminDao.insert(admin);
 		return Result.OK;
 	}
@@ -61,7 +63,9 @@ public class AdminServiceImpl implements AdminService {
 		session.setAttribute("admin", admin_no);
 		Cookie cookie = null;
 		try {
-			cookie = new Cookie("admin", URLEncoder.encode(admin.getName(),"UTF-8")+":"+admin.getEnterprise_id());
+			cookie = new Cookie("admin", admin.getId()+":"+URLEncoder.encode(admin.getName(),"UTF-8")+":"+admin.getEnterprise_id());
+			cookie.setPath("/");
+			cookie.setMaxAge(60*30);
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("URL编码不支持，请检查login()");
 		}
@@ -198,6 +202,26 @@ public class AdminServiceImpl implements AdminService {
 	public String getCorporations(int enterpriseId) {
 		Result result = new Result();
 		result.setObject(adminDao.getCorporations(enterpriseId));
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			if(cookie.getName().equals("admin")) {
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+				break;
+			}
+		}
+		request.getSession().invalidate();
+	}
+
+	@Override
+	public String getEnterprises() {
+		Result result = new Result();
+		result.setObject(adminDao.getEnterprises());
 		return JSONObject.toJSONString(result);
 	}
 

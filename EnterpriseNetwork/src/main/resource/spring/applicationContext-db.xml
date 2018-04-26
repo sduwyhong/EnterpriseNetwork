@@ -28,7 +28,7 @@
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="org.enterpriseNetwork.dao"></property>
-		<!-- 这里配置sqlSessionFactory会导致properties来不及读取 -->
+		<!-- 这里配置sqlSessionFactory的bean会导致properties来不及读取，所以直接给beanName算了 -->
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 </beans>

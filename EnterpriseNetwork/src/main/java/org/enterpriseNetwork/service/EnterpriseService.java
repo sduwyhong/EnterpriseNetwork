@@ -9,4 +9,6 @@ import org.enterpriseNetwork.model.Enterprise;
 public interface EnterpriseService {
 
 	String register(Enterprise enterprise);
+
+	String getName(int enterpriseId);
 }

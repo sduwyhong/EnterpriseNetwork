@@ -3,6 +3,7 @@ package org.enterpriseNetwork.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +14,11 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 
 import org.enterpriseNetwork.dao.employee.EmployeeDao;
+import org.enterpriseNetwork.dao.enterprise.EnterpriseDao;
 import org.enterpriseNetwork.model.Employee;
 import org.enterpriseNetwork.result.Result;
 import org.enterpriseNetwork.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.w3c.dom.UserDataHandler;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -29,6 +30,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	EmployeeDao employeeDao;
+	@Autowired
+	EnterpriseDao enterpriseDao;
 	
 	@Override
 	public String register(Employee employee) {
@@ -44,6 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(!errors.isEmpty()) {
 			return Result.BAD_PARAMS;
 		}
+		employee.setId(UUID.randomUUID().toString().replace("-", ""));
 		employeeDao.insert(employee);
 		return Result.OK;
 	}
@@ -63,7 +67,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		session.setAttribute("emp", worker_no);
 		Cookie cookie = null;
 		try {
-			cookie = new Cookie("emp", URLEncoder.encode(emp.getName(),"UTF-8")+":"+emp.getEnterprise_id());
+			cookie = new Cookie("emp", emp.getId()+":"+URLEncoder.encode(emp.getName(),"UTF-8")+":"+emp.getEnterprise_id());
+			cookie.setPath("/");
+			cookie.setMaxAge(60*30);
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("URL编码不支持，请检查login()");
 		}
@@ -102,7 +108,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public String getPretenialColleagues(String employeeId) {
 		Result result = new Result();
-		result.setObject(employeeDao.getPretenialColleagues(employeeId));
+		//mysql没有minus运算
+		List<Employee> pretenialColleagues = employeeDao.getPretenialColleagues(employeeId);
+		List<Employee> colleagues = employeeDao.getColleagues(employeeId);
+		if(pretenialColleagues != null) {
+			for (Employee employee : colleagues) {
+				pretenialColleagues.remove(employee);
+			}
+		}
+		result.setObject(pretenialColleagues);
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String update(Employee employee) {
+		employeeDao.update(employee);
+		return Result.OK;
+	}
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			if(cookie.getName().equals("emp")) {
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+				break;
+			}
+		}
+		request.getSession().invalidate();
+	}
+
+	@Override
+	public String getEnterprises() {
+		Result result = new Result();
+		result.setObject(enterpriseDao.getAll());
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String getInfo(String employeeId) {
+		Result result = new Result();
+		result.setObject(employeeDao.getInfo(employeeId));
 		return JSONObject.toJSONString(result);
 	}
 
