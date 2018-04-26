@@ -75,12 +75,14 @@
 					</a>
 						<ul class="am-list am-collapse admin-sidebar-sub am-in"
 							id="collapse-nav">
-							<li><a href="javascript:content.load('modify-enterprise.html')" class="am-cf"><span
+							<li><a href="javascript:content.load('modify-enterprise.html',function(){
+							system.init_modify_enterprise();})" class="am-cf"><span
 									class="am-icon-check"></span> 修改企业信息<span
 									class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>
 							</a>
 							</li>
-							<li><a href="admin-help.html"><span
+							<li><a href="javascript:content.load('employee.html',function(){
+							system.init_employee();})"><span
 									class="am-icon-puzzle-piece"></span> 企业员工管理</a>
 							</li>
 							<li><a href="admin-gallery.html"><span

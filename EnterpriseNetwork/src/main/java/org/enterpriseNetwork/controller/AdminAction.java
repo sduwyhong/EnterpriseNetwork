@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.enterpriseNetwork.VO.Corporation;
 import org.enterpriseNetwork.model.Admin;
 import org.enterpriseNetwork.model.Employee;
+import org.enterpriseNetwork.model.Enterprise;
 import org.enterpriseNetwork.model.Product;
 import org.enterpriseNetwork.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class AdminAction {
 
 	@Autowired
 	AdminService adminService;
-
+	
 	@ResponseBody
 	@RequestMapping(value="/register",method=RequestMethod.POST,produces=JSON)
 	public String register(Admin admin){
@@ -37,11 +38,25 @@ public class AdminAction {
 
 	@ResponseBody
 	@RequestMapping(value="/login",method=RequestMethod.POST,produces=JSON)
-	public String login(@RequestParam("admin_no") String admin_no, @RequestParam("password") String password,
+	public String login(@RequestParam("enterpriseId") int enterpriseId, 
+			@RequestParam("admin_no") String admin_no, 
+			@RequestParam("password") String password,
 			HttpServletRequest request, HttpServletResponse response){
-		return adminService.login(admin_no, password, request, response);
+		return adminService.login(enterpriseId, admin_no, password, request, response);
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value="/auth/enterprise/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
+	public String getEnterpriseInfo(@PathVariable("enterpriseId")int enterpriseId){
+		return adminService.getEnterpriseInfo(enterpriseId);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/auth/enterprise",method=RequestMethod.POST,produces=JSON)
+	public String modifyEnterprise(Enterprise enterprise){
+		return adminService.modifyEnterprise(enterprise);
+	}
+	
 	@ResponseBody
 	@RequestMapping(value="/auth/employee",method=RequestMethod.POST,produces=JSON)
 	public String addEmployee(Employee employee){

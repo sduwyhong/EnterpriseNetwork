@@ -16,8 +16,10 @@ import net.sf.oval.Validator;
 import org.enterpriseNetwork.VO.Corporation;
 import org.enterpriseNetwork.dao.admin.AdminDao;
 import org.enterpriseNetwork.dao.employee.EmployeeDao;
+import org.enterpriseNetwork.dao.enterprise.EnterpriseDao;
 import org.enterpriseNetwork.model.Admin;
 import org.enterpriseNetwork.model.Employee;
+import org.enterpriseNetwork.model.Enterprise;
 import org.enterpriseNetwork.model.Product;
 import org.enterpriseNetwork.result.Result;
 import org.enterpriseNetwork.service.AdminService;
@@ -35,9 +37,18 @@ public class AdminServiceImpl implements AdminService {
 	AdminDao adminDao;
 	@Autowired
 	EmployeeDao employeeDao;
+	@Autowired
+	EnterpriseDao enterpriseDao;
 	
 	@Override
 	public String register(Admin admin) {
+		Admin _admin = adminDao.getByNo(admin.getAdmin_no(), admin.getEnterprise_id());
+		if(_admin != null) {
+			Result result = new Result();
+			result.setStatus(400);
+			result.setMessage("管理员工号已经存在！");
+			return JSONObject.toJSONString(result);
+		}
 		Validator validator = new Validator();
 		List<ConstraintViolation> errors = validator.validate(admin);
 		if(!errors.isEmpty()) {
@@ -49,9 +60,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String login(String admin_no, String password,
+	public String login(int enterpriseId, String admin_no, String password,
 			HttpServletRequest request, HttpServletResponse response) {
-		Admin admin = adminDao.getByNo(admin_no);
+		Admin admin = adminDao.getByNo(admin_no, enterpriseId);
 		if(admin == null || !admin.getPassword().equals(password)) {
 			Result result = new Result();
 			result.setStatus(400);
@@ -75,7 +86,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public String addEmployee(Employee employee) {
-		Employee emp = employeeDao.getByNo(employee.getWorker_no());
+		Employee emp = employeeDao.getByNo(employee.getWorker_no(), employee.getEnterprise_id());
 		if(emp != null) {
 			Result result = new Result();
 			result.setStatus(400);
@@ -223,6 +234,19 @@ public class AdminServiceImpl implements AdminService {
 		Result result = new Result();
 		result.setObject(adminDao.getEnterprises());
 		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String getEnterpriseInfo(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(enterpriseDao.get(enterpriseId));
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String modifyEnterprise(Enterprise enterprise) {
+		enterpriseDao.update(enterprise);
+		return Result.OK;
 	}
 
 }

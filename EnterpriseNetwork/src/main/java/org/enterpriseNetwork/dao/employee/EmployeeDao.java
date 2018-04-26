@@ -15,7 +15,7 @@ import org.enterpriseNetwork.model.Product;
  */
 public interface EmployeeDao extends StringBaseDao<Employee>{
 
-	Employee getByNo(String worker_no);
+	Employee getByNo(@Param("worker_no")String worker_no, @Param("enterpriseId")int enterpriseId);
 
 	List<Enterprise> getResponsibleEnterprises(String employeeId);
 

@@ -40,9 +40,11 @@ public class EmployeeAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/login",method=RequestMethod.POST,produces=JSON)
-	public String login(@RequestParam("worker_no") String worker_no, @RequestParam("password") String password,
+	public String login(@RequestParam("enterpriseId")int enterpriseId, 
+			@RequestParam("worker_no") String worker_no, 
+			@RequestParam("password") String password,
 			HttpServletRequest request, HttpServletResponse response){
-		return employeeService.login(worker_no, password, request, response);
+		return employeeService.login(enterpriseId, worker_no, password, request, response);
 	}
 	
 	@RequestMapping(value="/auth/logout",method=RequestMethod.POST)

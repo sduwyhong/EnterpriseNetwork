@@ -13,7 +13,7 @@ public interface EmployeeService {
 
 	String register(Employee employee);
 	
-	String login(String worker_no, String password, 
+	String login(int enterpriseId, String worker_no, String password, 
 			HttpServletRequest request, HttpServletResponse response);
 	
 	void logout(HttpServletRequest request, HttpServletResponse response);

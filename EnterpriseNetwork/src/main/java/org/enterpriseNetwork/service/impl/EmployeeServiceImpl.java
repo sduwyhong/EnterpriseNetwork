@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public String register(Employee employee) {
-		Employee emp = employeeDao.getByNo(employee.getWorker_no());
+		Employee emp = employeeDao.getByNo(employee.getWorker_no(), employee.getEnterprise_id());
 		if(emp != null) {
 			Result result = new Result();
 			result.setStatus(400);
@@ -53,9 +53,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public String login(String worker_no, String password,
+	public String login(int enterpriseId, String worker_no, String password,
 			HttpServletRequest request, HttpServletResponse response) {
-		Employee emp = employeeDao.getByNo(worker_no);
+		Employee emp = employeeDao.getByNo(worker_no, enterpriseId);
 		if(emp == null || !emp.getPassword().equals(password)) {
 			Result result = new Result();
 			result.setStatus(400);

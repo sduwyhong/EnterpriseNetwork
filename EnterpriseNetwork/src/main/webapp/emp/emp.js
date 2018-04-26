@@ -21,6 +21,9 @@ $(document).ready(function(){
 		alert('请登录！');
 		location.href = '../emp-login.html';
 	}
+});
+$(document).ajaxError(function(){
+	alert('服务器忙！请稍候重试。');
 })
 var vm_modify_info = {};
 var vm_responsible_enterprise = {};
@@ -64,9 +67,6 @@ var system = {
 							}else{
 								alert(data.message);
 							}
-						},
-						error:function(){
-							alert('服务器忙');
 						}
 					})
 				}

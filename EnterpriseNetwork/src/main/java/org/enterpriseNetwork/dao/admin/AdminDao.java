@@ -19,7 +19,7 @@ import org.enterpriseNetwork.model.Product;
  */
 public interface AdminDao extends StringBaseDao<Admin>{
 
-	Admin getByNo(String admin_no);
+	Admin getByNo(@Param("admin_no")String admin_no, @Param("enterpriseId")int enterpriseId);
 
 	int deleteEmployee(String employeeId);
 

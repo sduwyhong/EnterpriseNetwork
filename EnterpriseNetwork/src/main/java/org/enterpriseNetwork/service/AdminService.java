@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.enterpriseNetwork.VO.Corporation;
 import org.enterpriseNetwork.model.Admin;
 import org.enterpriseNetwork.model.Employee;
+import org.enterpriseNetwork.model.Enterprise;
 import org.enterpriseNetwork.model.Product;
 
 /**
@@ -18,7 +19,7 @@ public interface AdminService {
 	
 	String register(Admin admin);
 	
-	String login(String admin_no, String password, 
+	String login(int enterpriseId, String admin_no, String password, 
 			HttpServletRequest request, HttpServletResponse response);
 	
 	void logout(HttpServletRequest request, HttpServletResponse response);
@@ -58,6 +59,10 @@ public interface AdminService {
 	String corporate(Corporation corporation);
 	
 	String cancelCorporation(int enterpriseId, int partnerId);
+
+	String getEnterpriseInfo(int enterpriseId);
+
+	String modifyEnterprise(Enterprise enterprise);
 	
 	
 }

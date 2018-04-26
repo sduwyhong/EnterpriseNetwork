@@ -14,7 +14,7 @@ void insert(T t);
 	
 	int update(T t);
 	
-	int get(int id);
+	T get(int id);
 	
 	List<T> getAll();
 }

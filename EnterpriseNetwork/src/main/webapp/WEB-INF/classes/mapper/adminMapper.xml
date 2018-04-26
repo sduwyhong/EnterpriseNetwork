@@ -141,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT *
 		FROM admin
 		WHERE admin_no = #{admin_no}
+		AND enterprise_id = #{enterpriseId}
 	</select>
 	
 	<select id="getEmployees" resultType="Employee">

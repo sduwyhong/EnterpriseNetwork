@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT *
 		FROM employee
 		WHERE worker_no = #{worker_no}
+		AND enterprise_id = #{enterpriseId}
 	</select>
 	
 	<select id="getResponsibleEnterprises" resultType="Enterprise">
