@@ -4,12 +4,14 @@ import lombok.Data;
 
 /**
  * @author wyhong
- * @date 2018-4-24
+ * @date 2018-4-27
  */
 @Data
-public class Composition {
+public class CompositionVO {
 
-	private int id;
+	private int productId;
 	private String product_name;
+	private int compositionId;
 	private String composition_name;
+	private String composition_enterprise;
 }

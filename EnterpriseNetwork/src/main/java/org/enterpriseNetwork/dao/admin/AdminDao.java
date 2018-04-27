@@ -3,10 +3,11 @@ package org.enterpriseNetwork.dao.admin;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.enterpriseNetwork.VO.Composition;
+import org.enterpriseNetwork.VO.CompositionVO;
 import org.enterpriseNetwork.VO.Corporation;
 import org.enterpriseNetwork.VO.EnterpriseDelegation;
 import org.enterpriseNetwork.VO.ProductDelegation;
+import org.enterpriseNetwork.VO.ProductVO;
 import org.enterpriseNetwork.dao.StringBaseDao;
 import org.enterpriseNetwork.model.Admin;
 import org.enterpriseNetwork.model.Employee;
@@ -45,9 +46,9 @@ public interface AdminDao extends StringBaseDao<Admin>{
 
 	List<Employee> getEmployees(int enterpriseId);
 	
-	List<Product> getProducts(int enterpriseId);
+	List<ProductVO> getProducts(int enterpriseId);
 
-	List<Composition> getCompositions(int enterpriseId);
+	List<CompositionVO> getCompositions(int enterpriseId);
 
 	List<EnterpriseDelegation> getEnterpriseDelegations(int enterpriseId);
 
@@ -56,6 +57,16 @@ public interface AdminDao extends StringBaseDao<Admin>{
 	List<Corporation> getCorporations(int enterpriseId);
 
 	List<Enterprise> getEnterprises();
+
+	int deleteAllCompositionRelation(int productId);
+
+	List<Product> getPretentialCompositions(int enterpriseId);
+
+	List<Enterprise> getPretentialCorporations(int enterpriseId);
+
+	Corporation getEmployeeInfoByPartner(@Param("enterpriseId")int enterpriseId, @Param("partnerId")int partnerId);
+
+	String getEmployeeIdByCorporatioin(@Param("enterpriseId")int enterpriseId, @Param("partnerId")int partnerId);
 
 
 }

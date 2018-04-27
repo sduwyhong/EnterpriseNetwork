@@ -63,6 +63,10 @@ public interface AdminService {
 	String getEnterpriseInfo(int enterpriseId);
 
 	String modifyEnterprise(Enterprise enterprise);
+
+	String getPretentialCompositions(int enterpriseId);
+
+	String getPretentialCorporations(int enterpriseId);
 	
 	
 }

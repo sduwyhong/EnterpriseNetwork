@@ -1,0 +1,8 @@
+操他妈个xxxx，我一定要爆粗口
+<button @click="remove(e.id)" >删除该员工</button>
+button开头的标签，不写type属性，你猜咋地？默认是submit！页面自动给你丫可劲地刷新！开心不？？
+下次button标签一定要手写type属性确认！！！！！！！！！！！！！！！！！！！
+或者关掉全局的submit事件！！！
+
+
+springmvc PUT/DELETE方法 只能传一个参数 多个参数默认用POST

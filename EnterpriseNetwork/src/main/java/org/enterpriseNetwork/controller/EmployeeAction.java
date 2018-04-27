@@ -27,12 +27,6 @@ public class EmployeeAction {
 	EmployeeService employeeService;
 	
 	@ResponseBody
-	@RequestMapping(value="/enterprise",method=RequestMethod.GET,produces=JSON)
-	public String getEnterprises(){
-		return employeeService.getEnterprises();
-	}
-	
-	@ResponseBody
 	@RequestMapping(value="/register",method=RequestMethod.POST,produces=JSON)
 	public String register(Employee employee){
 		return employeeService.register(employee);

@@ -138,7 +138,7 @@
 		methods:{
 			getEnterprises:function(){
 				$.ajax({
-					url:path+'employee/enterprise',
+					url:path+'enterprise/',
 					type:'get',
 					success:function(data){
 						vm.enterprises = data.object;

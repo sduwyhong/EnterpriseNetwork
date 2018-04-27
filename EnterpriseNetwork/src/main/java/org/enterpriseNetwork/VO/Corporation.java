@@ -11,8 +11,12 @@ public class Corporation {
 
 	private int id;
 	private int enterprise_id_1;
+	private String enterprise_1_name;
 	private int enterprise_id_2;
-	private int supply;
-	private int stock;
-	private int distribution;
+	private String enterprise_2_name;
+	private boolean supply;
+	private boolean stock;
+	private boolean distribution;
+	private String employee_name;
+	private String employee_id;
 }

@@ -29,6 +29,12 @@ public class EnterpriseAction {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value="/",method=RequestMethod.GET,produces=JSON)
+	public String getEnterprises(){
+		return enterpriseService.getAll();
+	}
+	
+	@ResponseBody
 	@RequestMapping(value="/name/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
 	public String getName(@PathVariable("enterpriseId")int enterpriseId){
 		return enterpriseService.getName(enterpriseId);

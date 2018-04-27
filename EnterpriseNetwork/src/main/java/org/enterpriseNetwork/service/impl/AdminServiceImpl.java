@@ -14,6 +14,7 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 
 import org.enterpriseNetwork.VO.Corporation;
+import org.enterpriseNetwork.VO.ProductVO;
 import org.enterpriseNetwork.dao.admin.AdminDao;
 import org.enterpriseNetwork.dao.employee.EmployeeDao;
 import org.enterpriseNetwork.dao.enterprise.EnterpriseDao;
@@ -83,7 +84,7 @@ public class AdminServiceImpl implements AdminService {
 		response.addCookie(cookie);
 		return Result.OK;
 	}
-
+	
 	@Override
 	public String addEmployee(Employee employee) {
 		Employee emp = employeeDao.getByNo(employee.getWorker_no(), employee.getEnterprise_id());
@@ -98,6 +99,7 @@ public class AdminServiceImpl implements AdminService {
 		if(!errors.isEmpty()) {
 			return Result.BAD_PARAMS;
 		}
+		employee.setId(UUID.randomUUID().toString().replace("-", ""));
 		employeeDao.insert(employee);
 		return Result.OK;
 	}
@@ -122,6 +124,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String deleteProduct(int productId) {
 		adminDao.deleteProduct(productId);
+		adminDao.deleteAllCompositionRelation(productId);
 		return Result.OK;
 	}
 
@@ -171,6 +174,8 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String cancelCorporation(int enterpriseId, int partnerId) {
 		adminDao.cancelCorporation(enterpriseId, partnerId);
+		String employeeId = adminDao.getEmployeeIdByCorporatioin(enterpriseId, partnerId);
+		adminDao.cancelDelegationOfEnterprise(employeeId, partnerId);
 		return Result.OK;
 	}
 
@@ -247,6 +252,30 @@ public class AdminServiceImpl implements AdminService {
 	public String modifyEnterprise(Enterprise enterprise) {
 		enterpriseDao.update(enterprise);
 		return Result.OK;
+	}
+
+	@Override
+	public String getPretentialCompositions(int enterpriseId) {
+		Result result = new Result();
+		result.setObject(adminDao.getPretentialCompositions(enterpriseId));
+		return JSONObject.toJSONString(result);
+	}
+
+	@Override
+	public String getPretentialCorporations(int enterpriseId) {
+		Result result = new Result();
+		List<Enterprise> pretentialCorporations = adminDao.getPretentialCorporations(enterpriseId);
+		List<Corporation> corporations = adminDao.getCorporations(enterpriseId);
+		//这里怎么优化呢>_<
+		for (Enterprise enterprise : pretentialCorporations) {
+			for (Corporation corporation : corporations) {
+				if(enterprise.getId() == corporation.getEnterprise_id_2()){
+					pretentialCorporations.remove(enterprise);
+				}
+			}
+		}
+		result.setObject(pretentialCorporations);
+		return JSONObject.toJSONString(result);
 	}
 
 }

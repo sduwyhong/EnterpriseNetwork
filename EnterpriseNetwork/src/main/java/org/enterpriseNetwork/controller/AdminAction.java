@@ -45,6 +45,11 @@ public class AdminAction {
 		return adminService.login(enterpriseId, admin_no, password, request, response);
 	}
 	
+	@RequestMapping(value="/auth/logout",method=RequestMethod.POST,produces=JSON)
+	public void logout(HttpServletRequest request, HttpServletResponse response){
+		adminService.logout(request, response);
+	}
+	
 	@ResponseBody
 	@RequestMapping(value="/auth/enterprise/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
 	public String getEnterpriseInfo(@PathVariable("enterpriseId")int enterpriseId){
@@ -94,6 +99,12 @@ public class AdminAction {
 	}
 
 	@ResponseBody
+	@RequestMapping(value="/auth/pretential/composition/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
+	String getPretentialCompositions(@PathVariable("enterpriseId")int enterpriseId){
+		return adminService.getPretentialCompositions(enterpriseId);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value="/auth/composition/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
 	String getCompositions(@PathVariable("enterpriseId")int enterpriseId){
 		return adminService.getCompositions(enterpriseId);
@@ -107,8 +118,9 @@ public class AdminAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/auth/composition",method=RequestMethod.DELETE,produces=JSON)
-	String deleteComposition(int productId, int compositionId){
+	@RequestMapping(value="/auth/delete/composition",method=RequestMethod.POST,produces=JSON)
+	String deleteComposition(@RequestParam("productId")int productId, 
+			@RequestParam("compositionId")int compositionId){
 		return adminService.deleteComposition(productId, compositionId);
 	}
 
@@ -127,7 +139,7 @@ public class AdminAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/auth/delegation/enterprise",method=RequestMethod.DELETE,produces=JSON)
+	@RequestMapping(value="/auth/cancel/delegation/enterprise",method=RequestMethod.POST,produces=JSON)
 	String cancelDelegationOfEnterprise(@RequestParam("employeeId")String employeeId, 
 			@RequestParam("enterpriseId")int enterpriseId){
 		return adminService.cancelDelegationOfEnterprise(employeeId, enterpriseId);
@@ -147,7 +159,7 @@ public class AdminAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/auth/delegation/product",method=RequestMethod.DELETE,produces=JSON)
+	@RequestMapping(value="/auth/cancel/delegation/product",method=RequestMethod.POST,produces=JSON)
 	String cancelDelegationOfProduct(@RequestParam("employeeId")String employeeId, 
 			@RequestParam("productId")int productId){
 		return adminService.cancelDelegationOfProduct(employeeId, productId);
@@ -160,13 +172,19 @@ public class AdminAction {
 	}
 
 	@ResponseBody
+	@RequestMapping(value="/auth/pretential/corporation/{enterpriseId}",method=RequestMethod.GET,produces=JSON)
+	String getPretentialCorporations(@PathVariable("enterpriseId")int enterpriseId){
+		return adminService.getPretentialCorporations(enterpriseId);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value="/auth/corporation",method=RequestMethod.POST,produces=JSON)
 	String corporate(Corporation corporation){
 		return adminService.corporate(corporation);
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/auth/corporation",method=RequestMethod.DELETE,produces=JSON)
+	@RequestMapping(value="/auth/cancel/corporation",method=RequestMethod.POST,produces=JSON)
 	String cancelCorporation(@RequestParam("enterpriseId")int enterpriseId, 
 			@RequestParam("partnerId")int partnerId){
 		return adminService.cancelCorporation(enterpriseId, partnerId);

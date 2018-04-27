@@ -46,6 +46,16 @@
     <br>
 
     <form method="post" class="am-form" id="admin_login">
+    <div class="am-form-group">
+	      <label for="doc-select-1" class="am-u-sm-3 am-form-label">所属公司 / Enterprise</label>
+	      <div class="am-u-sm-9">
+	      <select id="doc-select-1" v-model="data.enterpriseId" name="enterprise_id">
+	        <option value="" class="op">---请选择---</option>
+	        <option v-for="en in enterprises" v-bind:value="en.id" class="op">{{en.name}}</option>
+	      </select>
+	      <span class="am-form-caret"></span>
+	      </div>
+	    </div>
       <label for="email">管理员工号:</label>
       <input type="text" v-model="data.admin_no" name="" id="email" value="" required>
       <br>
@@ -69,12 +79,24 @@
 	var vm = new Vue({
 		el:'#admin_login',
 		data:{
+			enterprises:[],
 			data:{
+				enterpriseId:'',
 				admin_no:'',
 				password:''
 			}
 		},
 		methods:{
+			getEnterprises:function(){
+				$.ajax({
+					//这个接口给enterpriseAction比较好
+					url:path+'enterprise/',
+					type:'get',
+					success:function(data){
+						vm.enterprises = data.object;
+					}
+				});
+			},
 			login:function(){
 				$.ajax({
 					url:path+'admin/login',
@@ -94,6 +116,7 @@
 			}
 		}
 	})
+	vm.getEnterprises();
 </script>
 </body>
 </html>

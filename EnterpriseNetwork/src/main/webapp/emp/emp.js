@@ -13,6 +13,7 @@ $(document).ready(function(){
 			var value = cookieArray[i].split('=')[1].split(':');
 			user.id = value[0].substr(1);
 			user.name = decodeURI(value[1]);
+			$('#username').text(user.name);
 			user.enterprise_id = value[2].substr(0,value[2].length-1);
 			auth = true;
 		}

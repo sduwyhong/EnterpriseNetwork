@@ -17,60 +17,55 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<insert id="addProduct">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO product
+			(name,
+			description,
+			enterprise_id)
 		VALUES
-			(#{id},
-			#{name},
+			(#{name},
 			#{description},
 			#{enterprise_id})
 	</insert>
 	
 	<insert id="addComposition">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO compose_relation
+			(product_id,
+			composition_id)
 		VALUES
-			(#{id},
-			#{productId},
+			(#{productId},
 			#{compositionId})
 	</insert>
 	
 	<insert id="delegateEnterprise">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO employee_enterprise
+			(employee_id,
+			enterprise_id)
 		VALUES
-			(#{id},
-			#{employeeId},
+			(#{employeeId},
 			#{enterpriseId})
 	</insert>
 	
 	<insert id="delegateProduct">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO employee_product
+			(employee_id,
+			product_id)
 		VALUES
-			(#{id},
-			#{employeeId},
+			(#{employeeId},
 			#{productId})
 	</insert>
 	
 	<insert id="corporate">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO enterprise_relation
+			(enterprise_id_1,
+			enterprise_id_2,
+			supply,
+			stock,
+			distribution)
 		VALUES
-			(#{id},
-			#{enterprise_id_1},
+			(#{enterprise_id_1},
 			#{enterprise_id_2},
-			#{supply},#{stock},
+			#{supply},
+			#{stock},
 			#{distribution})
 	</insert>
 	
@@ -86,7 +81,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="deleteProduct">
 		DELETE FROM product
-		WHERE id = #{productId}
+		WHERE id = #{productId};
+	</delete>
+	
+	<delete id="deleteAllCompositionRelation">
+		DELETE FROM compose_relation
+		WHERE product_id = #{productId};
 	</delete>
 	
 	<delete id="deleteComposition">
@@ -149,47 +149,85 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM employee
 		WHERE enterprise_id = #{enterpriseId}
 	</select>
-	
-	<select id="getProducts" resultType="Product">
-		SELECT *
-		FROM product
-		WHERE product.enterprise_id = #{enterpriseId}
+
+	<!-- LEFT JOIN 解决了不存在则返回空值的问题 -->	
+	<select id="getProducts" resultType="ProductVO">
+		SELECT p.*,e.id employee_id,e.name employee_name
+		FROM product p 
+		LEFT OUTER JOIN (employee_product ep
+		LEFT OUTER JOIN employee e
+		ON ep.employee_id = e.id)
+		ON p.id = ep.product_id
+		WHERE p.enterprise_id = #{enterpriseId}
 	</select>
 	
-	<select id="getCompositions" resultType="Composition">
-		SELECT cr.id,p1.name product_name,p2.name composition_name
-		FROM product p1,compose_relation cr,product p2
+	<select id="getCompositions" resultType="CompositionVO">
+		SELECT 
+			p1.id productId,
+			p1.name product_name,
+			p2.id compositionId,
+			p2.name composition_name,
+			en.name composition_enterprise
+		FROM product p1,compose_relation cr,product p2,enterprise en
 		WHERE p1.id = cr.product_id
 		AND p2.id = cr.composition_id
 		AND p1.enterprise_id = #{enterpriseId}
-	</select>
-	
-	<select id="getEnterpriseDelegations" resultType="EnterpriseDelegation">
-		SELECT ee.id,em.name employee_name,en.name enterprise_name
-		FROM employee em,employee_enterprise ee,enterprise en
-		WHERE em.id = ee.employee_id
-		AND en.id = ee.enterprise_id
-		AND en.id = #{enterpriseId}
-	</select>
-	
-	<select id="getProductDelegations" resultType="ProductDelegation">
-		SELECT ep.id,em.name employee_name,p.name product_name
-		FROM employee em,employee_product ep,product p
-		WHERE em.id = ep.employee_id
-		AND p.id = ep.product_id
-		AND em.enterprise_id = #{enterpriseId}
+		AND en.id = p2.enterprise_id
 	</select>
 	
 	<select id="getCorporations" resultType="Corporation">
-		SELECT ee.id,en1.id enterprise_id_1,en2.id enterprise_id_2,ee.supply,ee.stock,ee.distribution
-		FROM enterprise e1,enterprise_relation er,enterprise e2
-		WHERE e1.id = er.enterprise_id_1
-		AND e2.id = er.enterprise_id_2
-		AND e1.id = #{enterpriseId}
+		SELECT 
+		e1.id enterprise_id_1,
+		e1.name enterprise_1_name,
+		e2.id enterprise_id_2,
+		e2.name enterprise_2_name,
+		er.supply,
+		er.stock,
+		er.distribution,
+		em.id employee_id,
+		em.name employee_name
+		FROM enterprise e1 
+		INNER JOIN enterprise_relation er 
+		ON e1.id = er.enterprise_id_1 
+		AND e1.id = #{enterpriseId} 
+		INNER JOIN enterprise e2 
+		ON e2.id = er.enterprise_id_2 
+		LEFT OUTER JOIN employee_enterprise ee 
+		ON ee.enterprise_id = er.enterprise_id_2 
+		LEFT OUTER JOIN employee em 
+		ON em.id = ee.employee_id
 	</select>
 	
 	<select id="getEnterprises" resultType="Enterprise">
 		SELECT *
 		FROM enterprise
+	</select>
+	
+	<select id="getPretentialCompositions" resultType="Product">
+		SELECT *
+		FROM product
+		WHERE enterprise_id != #{enterpriseId}
+	</select>
+	
+	<select id="getPretentialCorporations" resultType="Enterprise">
+		SELECT *
+		FROM enterprise
+		WHERE id != #{enterpriseId}
+	</select>
+	
+	<select id="getEmployeeInfoByPartner" resultType="Corporation">
+		SELECT em.name employee_name,em.id employee_id
+		FROM employee em,employee_enterprise ee
+		WHERE em.enterprise_id = #{enterpriseId}
+		AND ee.enterprise_id = #{partnerId}
+		AND em.id = ee.employee_id
+	</select>
+	
+	<select id="getEmployeeIdByCorporatioin" resultType="java.lang.String">
+		SELECT em.id
+		FROM employee em,employee_enterprise ee
+		WHERE ee.employee_id = em.id
+		AND ee.enterprise_id = #{partnerId}
+		AND em.enterprise_id = #{enterpriseId}
 	</select>
 </mapper>
