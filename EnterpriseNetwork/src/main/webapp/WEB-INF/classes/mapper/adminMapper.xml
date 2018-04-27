@@ -176,6 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getCorporations" resultType="Corporation">
+	<!-- 
 		SELECT 
 		e1.id enterprise_id_1,
 		e1.name enterprise_1_name,
@@ -196,6 +197,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON ee.enterprise_id = er.enterprise_id_2 
 		LEFT OUTER JOIN employee em 
 		ON em.id = ee.employee_id
+		AND em.enterprise_id = e1.id
+	 -->
+	 	SELECT 
+			e1.id enterprise_id_1,
+			e1.name enterprise_1_name,
+			e2.id enterprise_id_2,
+			e2.name enterprise_2_name,
+			er.supply,
+			er.stock,
+			er.distribution
+		FROM enterprise e1
+		INNER JOIN enterprise_relation er
+		ON er.enterprise_id_1 = e1.id
+		AND e1.id = #{enterpriseId}
+		INNER JOIN enterprise e2
+		ON er.enterprise_id_2 = e2.id
+	</select>
+	
+	<select id="getInCharge" resultType="Employee">
+		SELECT em.id,em.name
+		FROM employee em,employee_enterprise ee
+		WHERE em.id = ee.employee_id
+		AND ee.enterprise_id = #{partnerId}
+		AND em.enterprise_id = #{enterpriseId}
 	</select>
 	
 	<select id="getEnterprises" resultType="Enterprise">
@@ -210,6 +235,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getPretentialCorporations" resultType="Enterprise">
+		SELECT en.*
+		FROM enterprise en 
+		INNER JOIN enterprise_relation er
+		ON 	er.enterprise_id_1 = #{enterpriseId}
+		AND en.id != er.enterprise_id_2
+		AND en.id != #{enterpriseId}
+	</select>
+	
+	<select id="getOtherEnterprises" resultType="Enterprise">
 		SELECT *
 		FROM enterprise
 		WHERE id != #{enterpriseId}

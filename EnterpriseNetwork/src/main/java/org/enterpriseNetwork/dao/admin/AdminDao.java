@@ -1,6 +1,7 @@
 package org.enterpriseNetwork.dao.admin;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.ibatis.annotations.Param;
 import org.enterpriseNetwork.VO.CompositionVO;
@@ -67,6 +68,10 @@ public interface AdminDao extends StringBaseDao<Admin>{
 	Corporation getEmployeeInfoByPartner(@Param("enterpriseId")int enterpriseId, @Param("partnerId")int partnerId);
 
 	String getEmployeeIdByCorporatioin(@Param("enterpriseId")int enterpriseId, @Param("partnerId")int partnerId);
+
+	List<Enterprise> getOtherEnterprises(int enterpriseId);
+
+	Employee getInCharge(@Param("enterpriseId")int enterpriseId, @Param("partnerId")int partnerId);
 
 
 }

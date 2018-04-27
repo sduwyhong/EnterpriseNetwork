@@ -97,21 +97,25 @@
 				});
 			},
 			login:function(){
-				$.ajax({
-					url:path+'employee/login',
-					type:'post',
-					data:vm.data,
-					success:function(data){
-						if(data.status == '200'){
-							location.href = 'emp/emp-index.html';
-						}else{
-							alert(data.message);
+				if(vm.data.enterpriseId == ''){
+					alert('请选择企业！');
+				}else{
+					$.ajax({
+						url:path+'employee/login',
+						type:'post',
+						data:vm.data,
+						success:function(data){
+							if(data.status == '200'){
+								location.href = 'emp/emp-index.html';
+							}else{
+								alert(data.message);
+							}
+						},
+						error:function(){
+							alert('服务器忙！');
 						}
-					},
-					error:function(){
-						alert('服务器忙！');
-					}
-				})
+					})
+				}
 			}
 		}
 	})

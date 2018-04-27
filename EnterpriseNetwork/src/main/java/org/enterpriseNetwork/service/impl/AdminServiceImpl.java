@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
+import java.util.Vector;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,6 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 
 import org.enterpriseNetwork.VO.Corporation;
-import org.enterpriseNetwork.VO.ProductVO;
 import org.enterpriseNetwork.dao.admin.AdminDao;
 import org.enterpriseNetwork.dao.employee.EmployeeDao;
 import org.enterpriseNetwork.dao.enterprise.EnterpriseDao;
@@ -217,7 +217,15 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String getCorporations(int enterpriseId) {
 		Result result = new Result();
-		result.setObject(adminDao.getCorporations(enterpriseId));
+		List<Corporation> corporations = adminDao.getCorporations(enterpriseId);
+		for (Corporation corporation : corporations) {
+			Employee employee = adminDao.getInCharge(enterpriseId, corporation.getEnterprise_id_2());
+			if(employee != null){
+				corporation.setEmployee_id(employee.getId());
+				corporation.setEmployee_name(employee.getName());
+			}
+		}
+		result.setObject(corporations);
 		return JSONObject.toJSONString(result);
 	}
 
@@ -265,16 +273,8 @@ public class AdminServiceImpl implements AdminService {
 	public String getPretentialCorporations(int enterpriseId) {
 		Result result = new Result();
 		List<Enterprise> pretentialCorporations = adminDao.getPretentialCorporations(enterpriseId);
-		List<Corporation> corporations = adminDao.getCorporations(enterpriseId);
-		//这里怎么优化呢>_<
-		for (Enterprise enterprise : pretentialCorporations) {
-			for (Corporation corporation : corporations) {
-				if(enterprise.getId() == corporation.getEnterprise_id_2()){
-					pretentialCorporations.remove(enterprise);
-				}
-			}
-		}
-		result.setObject(pretentialCorporations);
+		if(pretentialCorporations.size() > 0) result.setObject(pretentialCorporations);
+		else result.setObject(adminDao.getOtherEnterprises(enterpriseId));
 		return JSONObject.toJSONString(result);
 	}
 
