@@ -1,8 +1,8 @@
 create table enterprise(
 	id int unsigned primary key auto_increment,
-	name varchar(20) not null,
-	address varchar(100) not null,
-	description varchar(500) not null
+	name varchar(20) unique key not null,
+	address varchar(100) not null default '',
+	description varchar(500) not null default ''
 );
 
 create table employee(

@@ -5,9 +5,12 @@ import org.enterpriseNetwork.service.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wordnik.swagger.annotations.ApiParam;
 
 /**
  * @author wyhong
@@ -24,7 +27,7 @@ public class EnterpriseAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/",method=RequestMethod.POST,produces=JSON)
-	public String register(Enterprise enterprise){
+	public String register(@ApiParam("id可选") Enterprise enterprise){
 		return enterpriseService.register(enterprise);
 	}
 	

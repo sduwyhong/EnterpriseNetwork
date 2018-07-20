@@ -1,5 +1,7 @@
 package org.enterpriseNetwork.dao.enterprise;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.enterpriseNetwork.dao.IntBaseDao;
 import org.enterpriseNetwork.model.Enterprise;
 
@@ -9,6 +11,7 @@ import org.enterpriseNetwork.model.Enterprise;
  */
 public interface EnterpriseDao extends IntBaseDao<Enterprise> {
 
+    @Select("SELECT name FROM enterprise WHERE id = #{enterpriseId}")
 	String getName(int enterpriseId);
 
 }

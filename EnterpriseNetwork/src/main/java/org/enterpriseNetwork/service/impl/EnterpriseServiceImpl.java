@@ -11,6 +11,8 @@ import org.enterpriseNetwork.model.Enterprise;
 import org.enterpriseNetwork.result.Result;
 import org.enterpriseNetwork.service.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 

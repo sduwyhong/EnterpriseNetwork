@@ -4,13 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.enterpriseNetwork.dao.enterprise.EnterpriseDao">
 	<insert id="insert">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 		INSERT INTO enterprise
+			(name,
+			address,
+			description)
 		VALUES
-			(#{id},
-			#{name},
+			(#{name},
 			#{address},
 			#{description})
 	</insert>
@@ -39,10 +38,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT *
 		FROM enterprise
 	</select>
-	
+	<!-- 
 	<select id="getName" resultType="java.lang.String">
 		SELECT name
 		FROM enterprise
 		WHERE id = #{enterpriseId}
 	</select>
+	 -->
 </mapper>

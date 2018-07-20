@@ -6,3 +6,24 @@ button开头的标签，不写type属性，你猜咋地？默认是submit！页�
 
 
 springmvc PUT/DELETE方法 只能传一个参数 多个参数默认用POST
+
+脚本语言中，变量和方法用snake命名
+JAVA中，变量和方法用camel命名
+
+pom修改依赖之后要clean一下project才生效
+
+*********************收获**********************
+出现classdefnotfound异常
+首先检查依赖jar是否存在
+	若不存在则导入（废话），并且每次对pom修改过后最好project-clean一下重新编译生效
+	若存在，则project-clean重新编译生效
+		这时仍报classdefnotfound错，检查依赖中是否存在重复且不！同！版！本！的依赖
+		若此时报找不到method
+			首先检查该！版！本！依赖中是否存在该method
+				存在，则检查是否存在重复且不！同！版！本！的依赖
+					存在低版本依赖，则找到对应dependency，配置exclusion防止冲突
+				不存在，引入正确的版本即可
+				
+swagger：
+参数类型为对象时，需加注释@RequestBody，才能在文档中显示参数
+说人话就是，以后写springmvc接口时，对象类型参数全部用json接收

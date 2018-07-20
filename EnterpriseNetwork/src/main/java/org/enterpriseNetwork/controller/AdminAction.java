@@ -12,6 +12,7 @@ import org.enterpriseNetwork.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ public class AdminAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/register",method=RequestMethod.POST,produces=JSON)
-	public String register(Admin admin){
+	public String register(@RequestBody Admin admin){
 		return adminService.register(admin);
 	}
 
@@ -58,13 +59,13 @@ public class AdminAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/auth/enterprise",method=RequestMethod.POST,produces=JSON)
-	public String modifyEnterprise(Enterprise enterprise){
+	public String modifyEnterprise(@RequestBody Enterprise enterprise){
 		return adminService.modifyEnterprise(enterprise);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/auth/employee",method=RequestMethod.POST,produces=JSON)
-	public String addEmployee(Employee employee){
+	public String addEmployee(@RequestBody Employee employee){
 		return adminService.addEmployee(employee);
 	}
 
@@ -82,7 +83,7 @@ public class AdminAction {
 
 	@ResponseBody
 	@RequestMapping(value="/auth/product",method=RequestMethod.POST,produces=JSON)
-	String addProduct(Product product){
+	String addProduct(@RequestBody Product product){
 		return adminService.addProduct(product);
 	}
 
@@ -179,7 +180,7 @@ public class AdminAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/auth/corporation",method=RequestMethod.POST,produces=JSON)
-	String corporate(Corporation corporation){
+	String corporate(@RequestBody Corporation corporation){
 		return adminService.corporate(corporation);
 	}
 

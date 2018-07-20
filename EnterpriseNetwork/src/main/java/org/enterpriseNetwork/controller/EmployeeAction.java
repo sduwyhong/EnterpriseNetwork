@@ -4,14 +4,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.enterpriseNetwork.model.Employee;
+import org.enterpriseNetwork.result.Result;
 import org.enterpriseNetwork.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 /**
  * @author wyhong
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/employee")
+@Api("employee")
 public class EmployeeAction {
 
 	private final String JSON = "application/json;charset=utf-8";
@@ -28,7 +36,8 @@ public class EmployeeAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/register",method=RequestMethod.POST,produces=JSON)
-	public String register(Employee employee){
+	@ApiOperation(value="注册新用户",httpMethod="POST", response=Result.class, produces=JSON, notes="注意各字段限制")
+	public String register(@RequestBody @ApiParam(name="employee",value="用户实体",required=true)Employee employee){
 		return employeeService.register(employee);
 	}
 	
@@ -54,7 +63,7 @@ public class EmployeeAction {
 	
 	@ResponseBody
 	@RequestMapping(value="/auth/update",method=RequestMethod.POST,produces=JSON)
-	public String update(Employee employee){
+	public String update(@RequestBody Employee employee){
 		return employeeService.update(employee);
 	}
 	
